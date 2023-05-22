@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "952373863467",
+    "firebase_url": "https://telechat-8f380-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "telechat-8f380",
+    "storage_bucket": "telechat-8f380.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952373863467:android:9efba91552dd4ea0e4766e",
+        "android_client_info": {
+          "package_name": "com.example.telechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952373863467-qci54uf7ptl84q3m5hlqs7tkt4f38g3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuIsiu_07z6KTczziokSBdgwChbhEURhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952373863467-qci54uf7ptl84q3m5hlqs7tkt4f38g3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
