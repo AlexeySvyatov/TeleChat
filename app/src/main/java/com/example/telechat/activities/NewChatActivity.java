@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.telechat.adapters.UserAdapter;
-import com.example.telechat.databinding.ActivityUserBinding;
-import com.example.telechat.models.User;
+import com.example.telechat.adapters.NewChatAdapter;
+import com.example.telechat.databinding.ActivityDoctorListBinding;
+import com.example.telechat.models.Doctor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,16 +17,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class UserActivity extends AppCompatActivity {
-    private ActivityUserBinding binding;
+public class NewChatActivity extends AppCompatActivity {
+    ActivityDoctorListBinding binding;
     FirebaseDatabase database;
-    ArrayList<User> users;
-    UserAdapter adapter;
+    ArrayList<Doctor> doctors;
+    NewChatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityUserBinding.inflate(getLayoutInflater());
+        binding = ActivityDoctorListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
         initialize();
@@ -39,9 +39,9 @@ public class UserActivity extends AppCompatActivity {
 
     private void initialize() {
         database = FirebaseDatabase.getInstance();
-        users = new ArrayList<>();
-        adapter = new UserAdapter(UserActivity.this, users);
-        binding.usersRecyclerView.setAdapter(adapter);
+        doctors = new ArrayList<>();
+        adapter = new NewChatAdapter(NewChatActivity.this, doctors);
+        binding.doctorsRecyclerView.setAdapter(adapter);
     }
 
     private void getUsers() {
@@ -51,13 +51,13 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    User user = dataSnapshot.getValue(User.class);
-                    users.add(user);
+                    Doctor doctor = dataSnapshot.getValue(Doctor.class);
+                    doctors.add(doctor);
                 }
                 loading(false);
                 adapter.notifyDataSetChanged();
-                if(users.size() > 0){
-                    binding.usersRecyclerView.setVisibility(View.VISIBLE);
+                if(doctors.size() > 0){
+                    binding.doctorsRecyclerView.setVisibility(View.VISIBLE);
                 }else{
                     showErrorMessage();
                 }
@@ -70,7 +70,7 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void showErrorMessage() {
-        binding.textErrorMessage.setText(String.format("%s", "No users available"));
+        binding.textErrorMessage.setText(String.format("%s", "Нет доступных врачей"));
         binding.textErrorMessage.setVisibility(View.VISIBLE);
     }
 

@@ -12,18 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.telechat.activities.ChatActivity;
-import com.example.telechat.activities.MainActivity;
+import com.example.telechat.activities.MainDoctorActivity;
 import com.example.telechat.databinding.ConversationItemBinding;
 import com.example.telechat.models.Conversation;
 
 import java.util.ArrayList;
 
-public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationViewHolder> {
-    Context mainActivity;
+public class ConversationWorkerAdapter extends RecyclerView.Adapter<ConversationWorkerAdapter.ConversationViewHolder> {
+    Context mainDoctorActivity;
     ArrayList<Conversation> conversations;
 
-    public ConversationAdapter(MainActivity mainActivity, ArrayList<Conversation> conversations) {
-        this.mainActivity = mainActivity;
+    public ConversationWorkerAdapter(MainDoctorActivity mainDoctorActivity, ArrayList<Conversation> conversations) {
+        this.mainDoctorActivity = mainDoctorActivity;
         this.conversations = conversations;
     }
 
@@ -40,11 +40,11 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         Conversation conversation = conversations.get(position);
         holder.setUserData(conversation);
         holder.itemView.setOnClickListener(event -> {
-            Intent intent = new Intent(mainActivity, ChatActivity.class);
+            Intent intent = new Intent(mainDoctorActivity, ChatActivity.class);
             intent.putExtra("name", conversation.getReceiverName());
             intent.putExtra("receiverImage", conversation.getImage());
             intent.putExtra("uid", conversation.getReceiverId());
-            mainActivity.startActivity(intent);
+            mainDoctorActivity.startActivity(intent);
         });
     }
 

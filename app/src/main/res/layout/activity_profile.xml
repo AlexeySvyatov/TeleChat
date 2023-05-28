@@ -1,148 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/_24sdp"
-    tools:context=".activities.ProfileActivity">
+    android:background="@color/primary"
+    tools:context=".activities.ChangeProfileActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageBack"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:background="@drawable/background_icon"
+        android:padding="@dimen/_6sdp"
+        android:src="@drawable/back_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:tint="@color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:text="Ваш профиль"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/imageBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageBack"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:background="@drawable/content_bot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageBack">
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:text="Change your data"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/_18ssp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal">
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/profileImage"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_80sdp"
-            android:background="@drawable/profile"
-            android:scaleType="centerCrop"
-            app:riv_oval="true"/>
-
-        <EditText
-            android:id="@+id/inputName"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_45sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:background="@drawable/back_input"
-            android:hint="Name"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:paddingStart="@dimen/_16sdp"
-            android:paddingEnd="@dimen/_16sdp"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/_13ssp"/>
-
-        <EditText
-            android:id="@+id/inputEmail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_45sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:background="@drawable/back_input"
-            android:hint="Email"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress"
-            android:paddingStart="@dimen/_16sdp"
-            android:paddingEnd="@dimen/_16sdp"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/_13ssp"/>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/profileImage"
+                android:layout_width="@dimen/_75sdp"
+                android:layout_height="@dimen/_75sdp"
+                android:scaleType="centerCrop"
+                app:riv_oval="true"/>
 
             <TextView
-                android:id="@+id/inputDate"
+                android:id="@+id/userName"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/back_input"
-                android:text="Birth Date"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textSize="@dimen/_13ssp"/>
+                android:layout_marginTop="@dimen/_12sdp"
+                android:paddingStart="@dimen/_8sdp"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
-            <DatePicker
-                android:id="@+id/birthDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:datePickerMode="spinner"
-                android:calendarViewShown="false"
-                android:layout_gravity="start"
-                android:visibility="gone"/>
-
-            <Button
-                android:id="@+id/saveDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:layout_gravity="right|bottom"
-                android:visibility="gone"/>
-
-        </FrameLayout>
-
-        <EditText
-            android:id="@+id/inputStatus"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_45sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:background="@drawable/back_input"
-            android:hint="Status"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:paddingStart="@dimen/_16sdp"
-            android:paddingEnd="@dimen/_16sdp"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/_13ssp"/>
-
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/layout3"
+            android:layout_below="@id/layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
-            android:animateLayoutChanges="true">
+            android:padding="@dimen/_4sdp"
+            android:orientation="vertical"
+            android:background="@drawable/back_input">
+
+            <TextView
+                android:id="@+id/userEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_6sdp"
+                android:paddingEnd="@dimen/_6sdp"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/_13ssp"/>
+
+            <TextView
+                android:id="@+id/userDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:paddingStart="@dimen/_6sdp"
+                android:paddingEnd="@dimen/_6sdp"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/_13ssp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout4"
+            android:layout_below="@id/layout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveChangesButton"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
-                android:text="Save changes"
+                android:id="@+id/changeData"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/_25sdp"
+                android:text="Изменить"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/_8sdp"/>
+                android:textStyle="bold"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/myAppointments"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Мои записи"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_below="@id/layout4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_12sdp"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:layout_gravity="center"
-                android:visibility="invisible"/>
-        </FrameLayout>
+                android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/textBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="Back to the main page"
-            android:textColor="@color/primary"
-            android:textSize="@dimen/_13ssp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-</RelativeLayout>
+            <TextView
+                android:id="@+id/errorMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_24sdp"
+                android:layout_marginEnd="@dimen/_24sdp"
+                android:gravity="center"
+                android:textColor="@color/error"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone"/>
+        </FrameLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

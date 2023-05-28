@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginBottom="@dimen/_4sdp"
-            android:text="Create new account"
+            android:text="Создать новый аккаунт"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/_18ssp"
             android:textStyle="bold"/>
@@ -37,7 +37,7 @@
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/back_input"
-            android:hint="Name"
+            android:hint="имя"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -52,7 +52,7 @@
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:background="@drawable/back_input"
-            android:hint="Email"
+            android:hint="Почта"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
@@ -71,7 +71,7 @@
                 android:layout_height="@dimen/_45sdp"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:background="@drawable/back_input"
-                android:text="Birth Date"
+                android:text="Дата рождения"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_16sdp"
@@ -83,15 +83,15 @@
                 android:layout_height="wrap_content"
                 android:datePickerMode="spinner"
                 android:calendarViewShown="false"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:visibility="gone"/>
 
             <Button
                 android:id="@+id/saveDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
-                android:layout_gravity="right|bottom"
+                android:text="Сохранить"
+                android:layout_gravity="end|bottom"
                 android:visibility="gone"/>
 
         </FrameLayout>
@@ -102,7 +102,7 @@
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:background="@drawable/back_input"
-            android:hint="Input Password"
+            android:hint="Пароль"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textPassword"
@@ -121,7 +121,7 @@
                 android:id="@+id/signUpButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:text="Sign up"
+                android:text="Зарегистрироваться"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp"
                 android:textStyle="bold"
@@ -141,7 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="Sign In"
+            android:text="Войти в аккаунт"
             android:textColor="@color/primary"
             android:textSize="@dimen/_13ssp"
             android:textStyle="bold"/>

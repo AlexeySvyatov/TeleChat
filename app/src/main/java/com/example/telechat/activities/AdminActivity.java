@@ -22,6 +22,7 @@ public class AdminActivity extends AppCompatActivity {
         binding.createDoctor.setOnClickListener(event ->
                 startActivity(new Intent(AdminActivity.this, CreateDoctorActivity.class)));
         binding.changeDoctor.setOnClickListener(event ->
-                startActivity(new Intent(AdminActivity.this, DoctorListActivity.class)));
+                startActivity(new Intent(AdminActivity.this, ChangeDoctorListActivity.class)));
+        binding.deleteDoctor.setOnClickListener(event -> startActivity(new Intent(AdminActivity.this, DeleteDoctorActivity.class)));
     }
 }

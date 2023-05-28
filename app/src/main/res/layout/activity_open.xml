@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.OpenActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginUser"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:gravity="start"
+                android:text="Войти"
+                android:textSize="@dimen/_11ssp"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginWorker"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:gravity="end"
+                android:text="Для работников"
+                android:textSize="@dimen/_11ssp"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/mainphoto"
+                android:scaleType="centerCrop"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="#5000"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="В любое время. В любой точке мира"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Позаботьтесь о своем здоровье и здоровье своих близких"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11ssp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Вы можете обратиться к нам, если"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/_15ssp"/>
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/relatives">
+                </ImageView>
+
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/illness">
+                </ImageView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Волнуетесь о близких"
+                    android:textSize="@dimen/_11ssp"
+                    android:textColor="@color/text_primary">
+                </TextView>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Плохое самочувствие"
+                    android:textSize="@dimen/_11ssp"
+                    android:textColor="@color/text_primary">
+                </TextView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/meds">
+                </ImageView>
+
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/other">
+                </ImageView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Запутались в лекарствах"
+                    android:textSize="@dimen/_11ssp"
+                    android:textColor="@color/text_primary">
+                </TextView>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Другая проблема"
+                    android:textSize="@dimen/_11ssp"
+                    android:textColor="@color/text_primary">
+                </TextView>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>

@@ -8,25 +8,25 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.telechat.databinding.ActivityLoginBinding;
+import com.example.telechat.databinding.ActivityLoginWorkerBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity {
-    private ActivityLoginBinding binding;
+public class LoginWorkerActivity extends AppCompatActivity {
+    ActivityLoginWorkerBinding binding;
     FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        binding = ActivityLoginWorkerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         auth = FirebaseAuth.getInstance();
         setListeners();
     }
 
     private void setListeners() {
-        binding.textRegistration.setOnClickListener(event ->
-                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
+        binding.textLoginAdmin.setOnClickListener(event ->
+                startActivity(new Intent(LoginWorkerActivity.this, LoginAdminActivity.class)));
 
         binding.loginButton.setOnClickListener(event -> {
             if(isValidSignInDetails()){
@@ -42,26 +42,26 @@ public class LoginActivity extends AppCompatActivity {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginWorkerActivity.this, MainDoctorActivity.class));
                     }else{
                         loading(false);
-                        showToast("Something went wrong");
+                        showToast("Не удалось войти в аккаунт");
                     }
                 });
     }
 
     private Boolean isValidSignInDetails() {
         if(binding.inputEmail.getText().toString().trim().isEmpty()){
-            binding.inputEmail.setError("This field can not be blank");
-            showToast("Enter email");
+            binding.inputEmail.setError("Это поле не может быть пустым");
+            showToast("Введите почту");
             return false;
         }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()){
-            binding.inputEmail.setError("Enter correct email");
-            showToast("Enter valid email");
+            binding.inputEmail.setError("Введите корректную почту");
+            showToast("Введите корректную почту");
             return false;
         }else if(binding.inputPassword.getText().toString().trim().isEmpty()){
-            binding.inputPassword.setError("This field can not be blank");
-            showToast("Enter password");
+            binding.inputPassword.setError("Это поле не может быть пустым");
+            showToast("Введите пароль");
             return false;
         }else{
             return true;

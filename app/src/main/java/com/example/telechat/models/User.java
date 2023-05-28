@@ -4,18 +4,16 @@ public class User {
     public String uid;
     public String name;
     public String email;
-    public String status;
     public String image;
     public String date;
     public String password;
 
     public User() {}
 
-    public User(String uid, String name, String email, String status, String image, String date, String password) {
+    public User(String uid, String name, String email, String image, String date, String password) {
         this.uid = uid;
         this.name = name;
         this.email = email;
-        this.status =status;
         this.image = image;
         this.date = date;
         this.password = password;
@@ -43,14 +41,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getImage() {

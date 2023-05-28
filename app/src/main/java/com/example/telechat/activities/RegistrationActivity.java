@@ -49,15 +49,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void setListeners() {
         binding.textSignIn.setOnClickListener(event ->
-                startActivity(new Intent(RegistrationActivity.this, LoginActivity.class)));
+                startActivity(new Intent(RegistrationActivity.this, LoginUserActivity.class)));
         binding.signUpButton.setOnClickListener(event -> {
             if(isValidSignUpDetails()){
                 String name = binding.inputName.getText().toString();
                 String email = binding.inputEmail.getText().toString();
                 String password = binding.inputPassword.getText().toString();
                 String date = binding.inputDate.getText().toString();
-                String status = "Hey, i`m new one here";
-                signUp(name, email, status, password, date);
+                signUp(name, email, password, date);
             }
         });
         binding.inputDate.setOnClickListener(event -> pickDate());
@@ -116,58 +115,58 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void signUp(String name, String email, String status, String password, String date){
+    private void signUp(String name, String email, String password, String date){
         loading(true);
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         DatabaseReference reference = database.getReference().child("patients").child(auth.getUid());
-                        User user = new User(auth.getUid(), name, email, status, image, date, password);
+                        User user = new User(auth.getUid(), name, email, image, date, password);
                         reference.setValue(user).addOnCompleteListener(users -> {
                             if(users.isSuccessful()){
-                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                Intent intent = new Intent(RegistrationActivity.this, MainUserActivity.class);
                                 intent.putExtra("name", name);
                                 intent.putExtra("image", image);
                                 startActivity(intent);
                             }else{
                                 loading(false);
-                                showToast("Registration error");
+                                showToast("Не удалось зарегистрироваться");
                             }
                         });
                     }else{
                         loading(false);
-                        showToast("Something went wrong");
+                        showToast("Что-то пошло не так");
                     }
                 });
     }
 
     private Boolean isValidSignUpDetails() {
         if (image == null) {
-            showToast("Select profile image");
+            showToast("Выберите фото профиля");
             return false;
         } else if (binding.inputName.getText().toString().trim().isEmpty()) {
-            binding.inputName.setError("This field can not be blank");
-            showToast("Enter name");
+            binding.inputName.setError("Это поле не может быть пустым");
+            showToast("Введите имя");
             return false;
         } else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
-            binding.inputEmail.setError("This field can not be blank");
-            showToast("Enter email");
+            binding.inputEmail.setError("Это поле не может быть пустым");
+            showToast("Введите почту");
             return false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            binding.inputEmail.setError("Enter correct email");
-            showToast("Enter valid email");
+            binding.inputEmail.setError("Введите корректную почту");
+            showToast("Введите корректную почту");
             return false;
         } else if (binding.inputDate.getText().equals("")) {
-            binding.inputDate.setError("This field can not be blank");
-            showToast("Enter birth date");
+            binding.inputDate.setError("Это поле не может быть пустым");
+            showToast("Введите дату рождения");
             return false;
         } else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
-            binding.inputPassword.setError("This field can not be blank");
-            showToast("Enter password");
+            binding.inputPassword.setError("Это поле не может быть пустым");
+            showToast("Введите пароль");
             return false;
         } else if (binding.inputPassword.getText().toString().trim().length() < 6) {
-            binding.inputPassword.setError("Enter more than 6 characters");
-            showToast("Password should be more than 6 symbols");
+            binding.inputPassword.setError("Введите больше 6 символов");
+            showToast("Пароль должен быть больше 6 символов");
             return false;
         } else {
             return true;

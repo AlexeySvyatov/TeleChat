@@ -1,6 +1,7 @@
 package com.example.telechat.models;
 
 public class Conversation {
+    public String conversationId;
     public String senderId;
     public String receiverId;
     public String receiverName;
@@ -10,13 +11,22 @@ public class Conversation {
 
     public Conversation() {}
 
-    public Conversation(String senderId, String receiverId, String receiverName, String message, String date, String image) {
+    public Conversation(String conversationId, String senderId, String receiverId, String receiverName, String message, String date, String image) {
+        this.conversationId = conversationId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.receiverName = receiverName;
         this.message = message;
         this.date = date;
         this.image = image;
+    }
+
+    public String getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
     }
 
     public String getSenderId() {

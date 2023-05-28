@@ -74,6 +74,7 @@ public class ChatActivity extends AppCompatActivity {
     private void initialize() {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+        messages = new ArrayList<>();
         messageAdapter = new MessageAdapter(ChatActivity.this, messages);
         binding.chatRecyclerView.setAdapter(messageAdapter);
     }
@@ -86,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage(){
         String message = binding.inputMessage.getText().toString();
         if(message.isEmpty()){
-            showToast("Please enter message");
+            showToast("Пожалуйста, введите сообщение");
             return;
         }
         Date date = new Date();
@@ -115,13 +116,13 @@ public class ChatActivity extends AppCompatActivity {
         binding.receiverName.setText(receiverName);
         binding.receiverImage.setImageBitmap(bitmap);
 
-        senderUId = auth.getUid();
+        senderUId = auth.getCurrentUser().getUid();
     }
 
     private void addConversation(String senderID, String receiverID, String receiverName, String message, String date, String image){
-        Conversation conversations = new Conversation(senderID, receiverID, receiverName, message, date, image);
         DatabaseReference reference = database.getReference().child("conversations");
         conversationsId = reference.push().getKey();
+        Conversation conversations = new Conversation(conversationsId, senderID, receiverID, receiverName, message, date, image);
         reference.push().setValue(conversations);
     }
 

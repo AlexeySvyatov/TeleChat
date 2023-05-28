@@ -44,6 +44,10 @@ public class ChangeDoctorActivity extends AppCompatActivity {
     FirebaseUser user;
     AuthCredential credential;
     ArrayList<Doctor> doctors;
+    String name;
+    String email;
+    String date;
+    String profession;
     String image;
     String oldEmail;
     String oldPassword;
@@ -61,10 +65,13 @@ public class ChangeDoctorActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    Doctor doctor = dataSnapshot.getValue(Doctor.class);
-                    doctors.add(doctor);
                     oldEmail = dataSnapshot.child(doctorID).child("email").getValue(String.class);
                     oldPassword = dataSnapshot.child(doctorID).child("password").getValue(String.class);
+                    name = dataSnapshot.child("name").getValue(String.class);
+                    email = dataSnapshot.child("email").getValue(String.class);
+                    date = dataSnapshot.child("date").getValue(String.class);
+                    profession = dataSnapshot.child("profession").getValue(String.class);
+                    image = dataSnapshot.child("image").getValue(String.class);
                 }
             }
             @Override
@@ -73,11 +80,11 @@ public class ChangeDoctorActivity extends AppCompatActivity {
             }
         });
 
-        binding.inputName.setText(String.valueOf(doctors.get(0)));
-        binding.inputEmail.setText(String.valueOf(doctors.get(1)));
-        binding.inputDate.setText(String.valueOf(doctors.get(2)));
-        binding.inputProfession.setText(String.valueOf(doctors.get(3)));
-        byte[] bytes = Base64.decode(String.valueOf(doctors.get(4)), Base64.DEFAULT);
+        binding.inputName.setText(name);
+        binding.inputEmail.setText(email);
+        binding.inputDate.setText(date);
+        binding.inputProfession.setText(profession);
+        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         binding.profileImage.setImageBitmap(bitmap);
     }
@@ -189,27 +196,27 @@ public class ChangeDoctorActivity extends AppCompatActivity {
 
     private Boolean isValidDataDetails() {
         if (image == null) {
-            showToast("Select profile image");
+            showToast("Выберите фото профиля");
             return false;
         }else if (binding.inputName.getText().toString().trim().isEmpty()) {
-            binding.inputName.setError("This field can not be blank");
-            showToast("Enter name");
+            binding.inputName.setError("Это поле не может быть пустым");
+            showToast("Введите имя");
             return false;
         }else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
-            binding.inputEmail.setError("This field can not be blank");
-            showToast("Enter email");
+            binding.inputEmail.setError("Это поле не может быть пустым");
+            showToast("Введите почту");
             return false;
         }else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            binding.inputEmail.setError("Enter correct email");
-            showToast("Enter valid email");
+            binding.inputEmail.setError("Введите корректную почту");
+            showToast("Введите правильную почту");
             return false;
         }else if (binding.inputDate.getText().equals("")) {
-            binding.inputDate.setError("This field can not be blank");
-            showToast("Enter birth date");
+            binding.inputDate.setError("Это поле не может быть пустым");
+            showToast("Введите дату рождения");
             return false;
         }else if (binding.inputProfession.getText().toString().trim().isEmpty()) {
-            binding.inputProfession.setError("This field can not be blank");
-            showToast("Enter status");
+            binding.inputProfession.setError("Это поле не может быть пустым");
+            showToast("Введите профессию");
             return false;
         }else {
             return true;

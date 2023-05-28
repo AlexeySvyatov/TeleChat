@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.telechat.adapters.DoctorAdapter;
+import com.example.telechat.adapters.DoctorDeleteAdapter;
 import com.example.telechat.databinding.ActivityDoctorListBinding;
 import com.example.telechat.models.Doctor;
 import com.google.firebase.database.DataSnapshot;
@@ -17,11 +17,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class DoctorListActivity extends AppCompatActivity {
+public class DeleteDoctorActivity extends AppCompatActivity {
     ActivityDoctorListBinding binding;
     FirebaseDatabase database;
     ArrayList<Doctor> doctors;
-    DoctorAdapter adapter;
+    DoctorDeleteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class DoctorListActivity extends AppCompatActivity {
     private void initialize() {
         database = FirebaseDatabase.getInstance();
         doctors = new ArrayList<>();
-        adapter = new DoctorAdapter(DoctorListActivity.this, doctors);
+        adapter = new DoctorDeleteAdapter(DeleteDoctorActivity.this, doctors);
         binding.doctorsRecyclerView.setAdapter(adapter);
     }
 
@@ -70,7 +70,7 @@ public class DoctorListActivity extends AppCompatActivity {
     }
 
     private void showErrorMessage() {
-        binding.textErrorMessage.setText(String.format("%s", "No doctors available"));
+        binding.textErrorMessage.setText(String.format("%s", "Нет доступных докторов"));
         binding.textErrorMessage.setVisibility(View.VISIBLE);
     }
 

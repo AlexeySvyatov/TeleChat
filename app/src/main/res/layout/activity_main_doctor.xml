@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:background="@color/primary"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainDoctorActivity">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageProfile"
@@ -82,7 +81,7 @@
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/newChatButton"
+        android:id="@+id/newAppointmentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_24sdp"

@@ -90,7 +90,8 @@
         android:padding="@dimen/_4sdp"
         android:background="@drawable/background_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/receiverName"
@@ -137,7 +138,7 @@
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_12sdp"
         android:background="@drawable/back_chat_input"
-        android:hint="Type a message"
+        android:hint="Введите сообщение"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="text"

@@ -2,6 +2,7 @@ package com.example.telechat.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,36 +17,71 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.telechat.databinding.ActivityCreateDoctorBinding;
-import com.example.telechat.models.Doctor;
+import com.example.telechat.databinding.ActivityChangeProfileBinding;
 import com.example.telechat.models.User;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CreateDoctorActivity extends AppCompatActivity {
-    ActivityCreateDoctorBinding binding;
-    FirebaseAuth auth;
+public class ChangeProfileActivity extends AppCompatActivity {
+    ActivityChangeProfileBinding binding;
     FirebaseDatabase database;
+    FirebaseAuth auth;
+    FirebaseUser user;
+    AuthCredential credential;
+    String oldEmail;
+    String oldPassword;
+    String name;
+    String email;
+    String date;
     String image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCreateDoctorBinding.inflate(getLayoutInflater());
+        binding = ActivityChangeProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setListeners();
         initialize();
-    }
+        setListeners();
 
-    private void initialize() {
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference().child("patients").child(auth.getCurrentUser().getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()){;
+                    oldEmail = dataSnapshot.child(auth.getUid()).child("email").getValue(String.class);
+                    oldPassword = dataSnapshot.child(auth.getUid()).child("password").getValue(String.class);
+                    name = dataSnapshot.child("name").getValue(String.class);
+                    email = dataSnapshot.child("email").getValue(String.class);
+                    date = dataSnapshot.child("date").getValue(String.class);
+                    image = dataSnapshot.child("image").getValue(String.class);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println(error.toException());
+            }
+        });
+
+        binding.inputName.setText(name);
+        binding.inputEmail.setText(email);
+        binding.inputDate.setText(date);
+        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        binding.profileImage.setImageBitmap(bitmap);
     }
 
     private void setListeners() {
@@ -55,38 +91,50 @@ public class CreateDoctorActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickImage.launch(intent);
         });
-        binding.createButton.setOnClickListener(event -> {
-            if(isValidCreateDetails()){
+        binding.saveChangesButton.setOnClickListener(event -> {
+            if(isValidDataDetails()){
                 String name = binding.inputName.getText().toString();
                 String email = binding.inputEmail.getText().toString();
-                String profession = binding.inputStatus.getText().toString();
                 String date = binding.inputDate.getText().toString();
-                String password = binding.inputPassword.getText().toString();
-                createDoctor(name, email, profession, date, password);
+                saveChanges(name, email, date);
             }
         });
     }
 
-    private void createDoctor(String name, String email, String profession, String date, String password) {
+    private void saveChanges(String name, String email, String date) {
+        user.reauthenticate(credential).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                user.updateEmail(email);
+            }
+        });
+
         loading(true);
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        DatabaseReference reference = database.getReference().child("doctors").child(auth.getUid());
-                        Doctor doctor = new Doctor(auth.getUid(), name, email, profession, image, date, password);
-                        reference.setValue(doctor).addOnCompleteListener(event -> {
-                            if(event.isSuccessful()){
-                                startActivity(new Intent(CreateDoctorActivity.this, AdminActivity.class));
-                            }else{
-                                loading(false);
-                                showToast("Не удалось создать доктора");
-                            }
-                        });
-                    }else{
-                        loading(false);
-                        showToast("Что-то пошло не так");
-                    }
-                });
+        HashMap<String, Object> newData = new HashMap<>();
+        newData.put("name", name);
+        newData.put("email", email);
+        newData.put("date", date);
+        newData.put("image", image);
+        DatabaseReference reference = database.getReference().child("patients").child(auth.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    dataSnapshot.getRef().updateChildren(newData);
+                }
+                loading(false);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println(error.toException());
+            }
+        });
+    }
+
+    private void initialize() {
+        database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        credential = EmailAuthProvider.getCredential(oldEmail, oldPassword);
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
@@ -138,49 +186,38 @@ public class CreateDoctorActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean isValidCreateDetails() {
+    private Boolean isValidDataDetails() {
         if (image == null) {
             showToast("Выберите фото профиля");
             return false;
-        } else if (binding.inputName.getText().toString().trim().isEmpty()) {
+        }else if (binding.inputName.getText().toString().trim().isEmpty()) {
             binding.inputName.setError("Это поле не может быть пустым");
             showToast("Введите имя");
             return false;
-        } else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
+        }else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
             binding.inputEmail.setError("Это поле не может быть пустым");
             showToast("Введите почту");
             return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
+        }else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
             binding.inputEmail.setError("Введите корректную почту");
             showToast("Введите корректную почту");
             return false;
-        } else if(binding.inputStatus.getText().toString().isEmpty()){
-            binding.inputStatus.setError("Это поле не может быть пустым");
-            return false;
-        } else if (binding.inputDate.getText().equals("")) {
+        }else if (binding.inputDate.getText().equals("")) {
             binding.inputDate.setError("Это поле не может быть пустым");
             showToast("Введите дату рождения");
             return false;
-        } else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
-            binding.inputPassword.setError("Это поле не может быть пустым");
-            showToast("Введите пароль");
-            return false;
-        } else if (binding.inputPassword.getText().toString().trim().length() < 6) {
-            binding.inputPassword.setError("введите больше 6 символов");
-            showToast("Пароль должен быть больше 6 символов");
-            return false;
-        } else {
+        }else {
             return true;
         }
     }
 
     private void loading(Boolean isLoading) {
         if(isLoading) {
-            binding.createButton.setVisibility(View.INVISIBLE);
+            binding.saveChangesButton.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.VISIBLE);
         }else{
             binding.progressBar.setVisibility(View.INVISIBLE);
-            binding.createButton.setVisibility(View.VISIBLE);
+            binding.saveChangesButton.setVisibility(View.VISIBLE);
         }
     }
 

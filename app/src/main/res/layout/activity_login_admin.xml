@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/_24sdp"
-    tools:context=".activities.LoginUserActivity">
+    tools:context=".activities.LoginAdminActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,11 +87,11 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/textRegistration"
+            android:id="@+id/textWorkerLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_30sdp"
-            android:text="Создать новый аккаунт"
+            android:text="Войти как доктор"
             android:textColor="@color/primary"
             android:textSize="@dimen/_13ssp"
             android:textStyle="bold"/>
