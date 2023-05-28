@@ -37,7 +37,7 @@
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/back_input"
-            android:hint="имя"
+            android:hint="Имя"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="text"
