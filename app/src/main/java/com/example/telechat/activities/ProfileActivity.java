@@ -29,10 +29,6 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth auth;
     AppointmentAdapter adapter;
     ArrayList<Appointment> appointments;
-    String name;
-    String email;
-    String date;
-    String image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,25 +42,19 @@ public class ProfileActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    name = dataSnapshot.child("name").getValue(String.class);
-                    email = dataSnapshot.child("email").getValue(String.class);
-                    date = dataSnapshot.child("date").getValue(String.class);
-                    image = dataSnapshot.child("image").getValue(String.class);
-                }
+                User user = snapshot.getValue(User.class);
+                binding.userName.setText(user.name);
+                binding.userEmail.setText(user.email);
+                binding.userDate.setText(user.date);
+                byte[] bytes = Base64.decode(user.image, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.profileImage.setImageBitmap(bitmap);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println(error.toException());
             }
         });
-
-        binding.userName.setText(name);
-        binding.userEmail.setText(email);
-        binding.userDate.setText(date);
-        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        binding.profileImage.setImageBitmap(bitmap);
     }
 
     private void setListeners() {

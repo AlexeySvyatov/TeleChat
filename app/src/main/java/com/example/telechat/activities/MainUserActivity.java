@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.telechat.adapters.ConversationUserAdapter;
 import com.example.telechat.databinding.ActivityMainUserBinding;
 import com.example.telechat.models.Conversation;
+import com.example.telechat.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,9 +28,8 @@ public class MainUserActivity extends AppCompatActivity {
     ActivityMainUserBinding binding;
     ConversationUserAdapter conversationUserAdapter;
     FirebaseDatabase database;
+    FirebaseAuth auth;
     ArrayList<Conversation> conversations;
-    String userName;
-    String userImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +74,28 @@ public class MainUserActivity extends AppCompatActivity {
 
     private void initialize() {
         database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
         conversations = new ArrayList<>();
         conversationUserAdapter = new ConversationUserAdapter(MainUserActivity.this, conversations);
         binding.conversationsRecyclerView.setAdapter(conversationUserAdapter);
     }
 
     private void loadDetails() {
-        userName = getIntent().getStringExtra("name");
-        userImage = getIntent().getStringExtra("image");
-
-        byte[] bytes = Base64.decode(userImage, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-        binding.textName.setText(userName);
-        binding.imageProfile.setImageBitmap(bitmap);
+        DatabaseReference reference = database.getReference().child("patients").child(auth.getCurrentUser().getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                binding.textName.setText(user.name);
+                byte[] bytes = Base64.decode(user.image, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.imageProfile.setImageBitmap(bitmap);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println(error.toException());
+            }
+        });
     }
 
     private void showToast(String message) {

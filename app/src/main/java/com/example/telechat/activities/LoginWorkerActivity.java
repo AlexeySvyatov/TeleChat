@@ -30,8 +30,8 @@ public class LoginWorkerActivity extends AppCompatActivity {
 
         binding.loginButton.setOnClickListener(event -> {
             if(isValidSignInDetails()){
-                String email = binding.inputEmail.getText().toString();
-                String password = binding.inputPassword.getText().toString();
+                String email = binding.inputEmail.getText().toString().trim();
+                String password = binding.inputPassword.getText().toString().trim();
                 signIn(email, password);
             }
         });

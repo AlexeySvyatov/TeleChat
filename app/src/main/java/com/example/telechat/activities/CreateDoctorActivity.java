@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.telechat.databinding.ActivityCreateDoctorBinding;
 import com.example.telechat.models.Doctor;
-import com.example.telechat.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

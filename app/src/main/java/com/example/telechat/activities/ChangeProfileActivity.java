@@ -33,7 +33,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChangeProfileActivity extends AppCompatActivity {
@@ -44,9 +43,6 @@ public class ChangeProfileActivity extends AppCompatActivity {
     AuthCredential credential;
     String oldEmail;
     String oldPassword;
-    String name;
-    String email;
-    String date;
     String image;
 
     @Override
@@ -61,27 +57,23 @@ public class ChangeProfileActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){;
-                    oldEmail = dataSnapshot.child(auth.getUid()).child("email").getValue(String.class);
-                    oldPassword = dataSnapshot.child(auth.getUid()).child("password").getValue(String.class);
-                    name = dataSnapshot.child("name").getValue(String.class);
-                    email = dataSnapshot.child("email").getValue(String.class);
-                    date = dataSnapshot.child("date").getValue(String.class);
-                    image = dataSnapshot.child("image").getValue(String.class);
-                }
+                User user = snapshot.getValue(User.class);
+                binding.inputName.setText(user.name);
+                binding.inputEmail.setText(user.email);
+                binding.inputDate.setText(user.date);
+                byte[] bytes = Base64.decode(user.image, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.profileImage.setImageBitmap(bitmap);
+
+                oldEmail = user.email;
+                oldPassword = user.password;
+                credential = EmailAuthProvider.getCredential(oldEmail, oldPassword);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println(error.toException());
             }
         });
-
-        binding.inputName.setText(name);
-        binding.inputEmail.setText(email);
-        binding.inputDate.setText(date);
-        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        binding.profileImage.setImageBitmap(bitmap);
     }
 
     private void setListeners() {
@@ -107,34 +99,19 @@ public class ChangeProfileActivity extends AppCompatActivity {
                 user.updateEmail(email);
             }
         });
-
         loading(true);
-        HashMap<String, Object> newData = new HashMap<>();
-        newData.put("name", name);
-        newData.put("email", email);
-        newData.put("date", date);
-        newData.put("image", image);
-        DatabaseReference reference = database.getReference().child("patients").child(auth.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    dataSnapshot.getRef().updateChildren(newData);
-                }
-                loading(false);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println(error.toException());
-            }
-        });
+        DatabaseReference reference = database.getReference().child("patients").child(auth.getCurrentUser().getUid());
+        reference.child("name").setValue(name);
+        reference.child("email").setValue(email);
+        reference.child("date").setValue(date);
+        reference.child("image").setValue(image);
+        startActivity(new Intent(ChangeProfileActivity.this,  ProfileActivity.class));
     }
 
     private void initialize() {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        credential = EmailAuthProvider.getCredential(oldEmail, oldPassword);
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(

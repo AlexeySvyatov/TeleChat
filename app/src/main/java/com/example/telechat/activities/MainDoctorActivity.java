@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.telechat.adapters.ConversationWorkerAdapter;
 import com.example.telechat.databinding.ActivityMainDoctorBinding;
 import com.example.telechat.models.Conversation;
+import com.example.telechat.models.Doctor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,16 +30,14 @@ public class MainDoctorActivity extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseAuth auth;
     ArrayList<Conversation> conversations;
-    String userName;
-    String userImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainDoctorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setListeners();
         initialize();
+        setListeners();
         loadDetails();
 
         DatabaseReference reference = database.getReference().child("conversations");
@@ -62,18 +61,26 @@ public class MainDoctorActivity extends AppCompatActivity {
     }
 
     private void loadDetails() {
-        userName = getIntent().getStringExtra("name");
-        userImage = getIntent().getStringExtra("image");
-
-        byte[] bytes = Base64.decode(userImage, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-        binding.textName.setText(userName);
-        binding.imageProfile.setImageBitmap(bitmap);
+        DatabaseReference reference = database.getReference().child("doctors").child(auth.getCurrentUser().getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Doctor doctor = snapshot.getValue(Doctor.class);
+                binding.textName.setText(doctor.name);
+                byte[] bytes = Base64.decode(doctor.image, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.imageProfile.setImageBitmap(bitmap);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println(error.toException());
+            }
+        });
     }
 
     private void initialize() {
         database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
         conversations = new ArrayList<>();
         conversationWorkerAdapter = new ConversationWorkerAdapter(MainDoctorActivity.this, conversations);
         binding.conversationsRecyclerView.setAdapter(conversationWorkerAdapter);
@@ -87,7 +94,7 @@ public class MainDoctorActivity extends AppCompatActivity {
         });
         binding.newAppointmentButton.setOnClickListener(event -> {
             Intent intent = new Intent(MainDoctorActivity.this, AppointmentsActivity.class);
-            intent.putExtra("doctorName", userName);
+            intent.putExtra("doctorName", binding.textName.getText().toString());
             intent.putExtra("doctorUid", auth.getCurrentUser().getUid());
             startActivity(intent);
         });

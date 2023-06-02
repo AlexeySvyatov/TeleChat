@@ -44,10 +44,6 @@ public class ChangeDoctorActivity extends AppCompatActivity {
     FirebaseUser user;
     AuthCredential credential;
     ArrayList<Doctor> doctors;
-    String name;
-    String email;
-    String date;
-    String profession;
     String image;
     String oldEmail;
     String oldPassword;
@@ -64,29 +60,24 @@ public class ChangeDoctorActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    oldEmail = dataSnapshot.child(doctorID).child("email").getValue(String.class);
-                    oldPassword = dataSnapshot.child(doctorID).child("password").getValue(String.class);
-                    name = dataSnapshot.child("name").getValue(String.class);
-                    email = dataSnapshot.child("email").getValue(String.class);
-                    date = dataSnapshot.child("date").getValue(String.class);
-                    profession = dataSnapshot.child("profession").getValue(String.class);
-                    image = dataSnapshot.child("image").getValue(String.class);
-                }
+                Doctor doctor = snapshot.getValue(Doctor.class);
+                binding.inputName.setText(doctor.name);
+                binding.inputEmail.setText(doctor.email);
+                binding.inputDate.setText(doctor.date);
+                binding.inputProfession.setText(doctor.profession);
+                byte[] bytes = Base64.decode(doctor.image, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.profileImage.setImageBitmap(bitmap);
+
+                oldEmail = doctor.email;
+                oldPassword = doctor.password;
+                credential = EmailAuthProvider.getCredential(oldEmail, oldPassword);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println(error.toException());
             }
         });
-
-        binding.inputName.setText(name);
-        binding.inputEmail.setText(email);
-        binding.inputDate.setText(date);
-        binding.inputProfession.setText(profession);
-        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        binding.profileImage.setImageBitmap(bitmap);
     }
 
     private void setListeners() {
@@ -115,25 +106,13 @@ public class ChangeDoctorActivity extends AppCompatActivity {
         });
 
         loading(true);
-        HashMap<String, Object> newData = new HashMap<>();
-        newData.put("name", name);
-        newData.put("email", email);
-        newData.put("profession", profession);
-        newData.put("date", date);
         DatabaseReference reference = database.getReference().child("doctors").child(doctorID);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    dataSnapshot.getRef().updateChildren(newData);
-                }
-                loading(false);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println(error.toException());
-            }
-        });
+        reference.child("name").setValue(name);
+        reference.child("email").setValue(email);
+        reference.child("date").setValue(date);
+        reference.child("profession").setValue(profession);
+        reference.child("image").setValue(image);
+        startActivity(new Intent(ChangeDoctorActivity.this,  AdminActivity.class));
     }
 
     private void initialize() {
@@ -141,7 +120,6 @@ public class ChangeDoctorActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        credential = EmailAuthProvider.getCredential(oldEmail, oldPassword);
         doctors = new ArrayList<>();
     }
 
